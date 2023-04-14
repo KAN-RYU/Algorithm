@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # tree
     tmp = 1
     while True:
-        if tmp >= 2**N:
+        if tmp >= 2*N:
             break
         tmp *= 2
     tree = [0] * (tmp + 1)
@@ -45,6 +45,7 @@ if __name__ == "__main__":
         a, b, c = map(int, input().split())
         if a == 1:
             update_tree(tree, 1, 0, N-1, b-1, c - nums[b-1])
+            nums[b-1] = c
             # lf = 1
             # for i in range(1, len(tree)-2):
             #     print(tree[i], end= " ")
