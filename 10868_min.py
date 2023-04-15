@@ -1,47 +1,48 @@
 import sys
 
-def init_tree(nums, tree, node, start, end):
+def init_tree(node, start, end):
     if (start == end):
         tree[node] = nums[start]
         return tree[node]
     else:
-        tree[node] = min(init_tree(nums, tree, node * 2, start, (start + end) // 2), init_tree(nums, tree, node * 2 + 1, (start+end) // 2 + 1, end))
+        mid = (start + end) // 2
+        tree[node] = min(init_tree(node * 2, start, mid), init_tree(node * 2 + 1, mid + 1, end))
         return tree[node]
 
-def min_tree(tree, node, start, end, left, right):
+def min_tree(node, start, end, left, right):
     if (end < left or right < start):
-        return 1E15
+        return 1E13
     if (left <= start and end <= right):
         return tree[node]
-    return min(min_tree(tree, node * 2, start, (start+end)//2, left, right) , min_tree(tree, node*2 +1, (start+end) //2 + 1, end, left, right))
-        
+    mid = (start + end) // 2
+    return min(min_tree(node * 2, start, mid, left, right) , min_tree(node*2 +1, mid + 1, end, left, right))
+
+
+nums = []
+tree = []
+
 if __name__ == "__main__":
     N, M = map(int, input().split())
-    
-    nums = [0] * N
+    # nums = [0] * N
     
     # init
     for i in range(N):
-        nums[i] = int(sys.stdin.readline())
+        nums.append(int(sys.stdin.readline()))
     
     # tree
     tmp = 1
-    while True:
-        if tmp >= 2*N:
-            break
+    while tmp < 2 * N:
         tmp *= 2
     tree = [0] * (tmp + 1)
     
-    init_tree(nums, tree, 1, 0, N-1)
+    init_tree(1, 0, N-1)
     
-    ans = [0] * M
+    ans = ""
     for i in range(M):
-        a, b = map(int, input().split())
-        ans[i] = min_tree(tree, 1, 0, N-1, a-1, b-1)
+        a, b = [int(x) for x in sys.stdin.readline().split()]
+        ak = min_tree(1, 0, N-1, a-1, b-1)
+        print(ak) # 이게 더 빠르다?!
+    #     ans += str(ak) + "\n"
     
-    anss = ""
-    for c in ans:
-        anss += str(c) + "\n"
-    
-    print(anss)
+    # print(ans)
     
